@@ -44,10 +44,10 @@ class BaseParser(object):
         # output encoding
         # http://nedbatchelder.com/text/unipain/unipain.html#35
         byte_string = self.extract(filename, **kwargs)
-        unicode_string = self.decode(byte_string, input_encoding, **kwargs)
+        unicode_string = self.decode(byte_string, input_encoding)
         return self.encode(unicode_string, output_encoding)
 
-    def decode(self, text, input_encoding=None, **kwargs):
+    def decode(self, text, input_encoding=None):
         """Decode ``text`` using the `chardet
         <https://github.com/chardet/chardet>`_ package.
         """
@@ -62,11 +62,11 @@ class BaseParser(object):
 
         # use the provided encoding
         if input_encoding:
-            return text.decode(input_encoding, **kwargs)
+            return text.decode(input_encoding, errors='ignore')
 
         # use chardet to automatically detect the encoding text if no encoding is provided
         result = chardet.detect(text)
-        return text.decode(result['encoding'], **kwargs)
+        return text.decode(result['encoding'], errors='ignore')
 
 
 class ShellParser(BaseParser):
